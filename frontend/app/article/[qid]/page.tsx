@@ -3,13 +3,14 @@ import { ArrowLeft, BookOpen, Calendar, Eye, Scroll, Share, Star, Flame, Sparkle
 import { notFound } from "next/navigation"
 
 interface Article {
+  qid: string
   title: string
   description: string
   image: string
-  category: string
   views: string
-  lastUpdated: string
+  category: string
   rarity: string
+  lastUpdated: string
   infobox: Record<string, string>
   content: string
 }
@@ -17,6 +18,7 @@ interface Article {
 // Mock ancient knowledge data
 const ancientKnowledge: Record<string, Article> = {
   Q5: {
+    qid: "5",
     title: "The Nature of Humanity",
     description: "Ancient wisdom on the essence of human existence",
     image: "/placeholder.svg?height=400&width=600",
@@ -48,6 +50,7 @@ const ancientKnowledge: Record<string, Article> = {
     `,
   },
   Q42: {
+    qid: "42",
     title: "The Chronicler Adams",
     description: "Keeper of cosmic humor and universal truths",
     image: "/placeholder.svg?height=400&width=600",
@@ -205,7 +208,7 @@ export default async function ArticlePage({ params }: PageProps) {
               <div className="relative rounded-xl overflow-hidden mb-8 border-2 border-amber-700/40 ancient-frame">
                 <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 via-transparent to-amber-400/20 animate-border-glow" />
                 <img
-                  src={article.image || "/old-paper.svg"}
+                  src={article.image || "/old-paper.jpg"}
                   alt={article.title}
                   className="w-full h-64 object-cover sepia-effect"
                 />

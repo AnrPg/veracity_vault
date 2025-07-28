@@ -1,99 +1,132 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowRight, BookOpen, Scroll, Sparkles, Eye, Flame } from "lucide-react"
+import { useEffect, useState } from "react"
 
-// Mock data for the top 10 most sought-after ancient knowledge
-const ancientKnowledge = [
-  {
-    qid: "Q5",
-    title: "The Nature of Humanity",
-    description: "Ancient wisdom on the essence of human existence",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "2.1M seekers",
-    category: "Philosophy",
-    rarity: "Sacred",
-  },
-  {
-    qid: "Q42",
-    title: "The Chronicler Adams",
-    description: "Keeper of cosmic humor and universal truths",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.8M seekers",
-    category: "Chronicles",
-    rarity: "Legendary",
-  },
-  {
-    qid: "Q1",
-    title: "The Cosmic Tapestry",
-    description: "Ancient understanding of all existence",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.6M seekers",
-    category: "Cosmology",
-    rarity: "Divine",
-  },
-  {
-    qid: "Q11573",
-    title: "The Thinking Constructs",
-    description: "Ancient prophecies of artificial minds",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.4M seekers",
-    category: "Prophecy",
-    rarity: "Mystical",
-  },
-  {
-    qid: "Q7318",
-    title: "The Dark Empire",
-    description: "Chronicles of a fallen realm",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.3M seekers",
-    category: "History",
-    rarity: "Cursed",
-  },
-  {
-    qid: "Q5582",
-    title: "The Great Beginning",
-    description: "Ancient creation myths and cosmic birth",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.2M seekers",
-    category: "Creation",
-    rarity: "Sacred",
-  },
-  {
-    qid: "Q8142",
-    title: "The Art of Exchange",
-    description: "Ancient wisdom on trade and value",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.1M seekers",
-    category: "Commerce",
-    rarity: "Common",
-  },
-  {
-    qid: "Q5107",
-    title: "The Great Lands",
-    description: "Ancient maps of the world's foundations",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "1.0M seekers",
-    category: "Geography",
-    rarity: "Rare",
-  },
-  {
-    qid: "Q11660",
-    title: "The Mind Webs",
-    description: "Ancient understanding of thought networks",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "950K seekers",
-    category: "Mysticism",
-    rarity: "Arcane",
-  },
-  {
-    qid: "Q2539",
-    title: "The Learning Arts",
-    description: "Ancient methods of knowledge acquisition",
-    image: "/placeholder.svg?height=200&width=300",
-    views: "900K seekers",
-    category: "Wisdom",
-    rarity: "Sacred",
-  },
-]
+// // Mock data for the top 10 most sought-after ancient knowledge
+// const ancientKnowledge = [
+//   {
+//     qid: "Q5",
+//     title: "The Nature of Humanity",
+//     description: "Ancient wisdom on the essence of human existence",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "2.1M seekers",
+//     category: "Philosophy",
+//     rarity: "Sacred",
+//   },
+//   {
+//     qid: "Q42",
+//     title: "The Chronicler Adams",
+//     description: "Keeper of cosmic humor and universal truths",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.8M seekers",
+//     category: "Chronicles",
+//     rarity: "Legendary",
+//   },
+//   {
+//     qid: "Q1",
+//     title: "The Cosmic Tapestry",
+//     description: "Ancient understanding of all existence",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.6M seekers",
+//     category: "Cosmology",
+//     rarity: "Divine",
+//   },
+//   {
+//     qid: "Q11573",
+//     title: "The Thinking Constructs",
+//     description: "Ancient prophecies of artificial minds",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.4M seekers",
+//     category: "Prophecy",
+//     rarity: "Mystical",
+//   },
+//   {
+//     qid: "Q7318",
+//     title: "The Dark Empire",
+//     description: "Chronicles of a fallen realm",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.3M seekers",
+//     category: "History",
+//     rarity: "Cursed",
+//   },
+//   {
+//     qid: "Q5582",
+//     title: "The Great Beginning",
+//     description: "Ancient creation myths and cosmic birth",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.2M seekers",
+//     category: "Creation",
+//     rarity: "Sacred",
+//   },
+//   {
+//     qid: "Q8142",
+//     title: "The Art of Exchange",
+//     description: "Ancient wisdom on trade and value",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.1M seekers",
+//     category: "Commerce",
+//     rarity: "Common",
+//   },
+//   {
+//     qid: "Q5107",
+//     title: "The Great Lands",
+//     description: "Ancient maps of the world's foundations",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "1.0M seekers",
+//     category: "Geography",
+//     rarity: "Rare",
+//   },
+//   {
+//     qid: "Q11660",
+//     title: "The Mind Webs",
+//     description: "Ancient understanding of thought networks",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "950K seekers",
+//     category: "Mysticism",
+//     rarity: "Arcane",
+//   },
+//   {
+//     qid: "Q2539",
+//     title: "The Learning Arts",
+//     description: "Ancient methods of knowledge acquisition",
+//     image: "/placeholder.svg?height=200&width=300",
+//     views: "900K seekers",
+//     category: "Wisdom",
+//     rarity: "Sacred",
+//   },
+// ]
+
+const ultraAncientGlyphs: string[] = [
+
+  // Glagolitic (old Slavic alphabet)
+  "Ⰰ","Ⰱ","Ⰲ","Ⰳ","Ⰴ","Ⰵ","Ⰶ","Ⰷ","Ⰸ","Ⰹ","Ⰺ","Ⰻ","Ⰼ","Ⰽ","Ⰾ","Ⰿ","Ⱀ","Ⱁ","Ⱂ","Ⱃ","Ⱄ","Ⱅ","Ⱆ","Ⱇ","Ⱈ","Ⱉ","Ⱊ","Ⱋ","Ⱌ","Ⱍ","Ⱎ","Ⱏ","Ⱐ","Ⱑ","Ⱒ","Ⱓ","Ⱔ","Ⱕ","Ⱖ","Ⱗ","Ⱘ","Ⱙ","Ⱚ","Ⱛ","Ⱜ","Ⱝ","Ⱞ","Ⱟ","ⰰ","ⰱ","ⰲ","ⰳ","ⰴ","ⰵ","ⰶ","ⰷ","ⰸ","ⰹ","ⰺ","ⰻ","ⰼ","ⰽ","ⰾ","ⰿ","ⱀ","ⱁ","ⱂ","ⱃ","ⱄ","ⱅ","ⱆ","ⱇ","ⱈ","ⱉ","ⱊ","ⱋ","ⱌ","ⱍ","ⱎ","ⱏ",
+  // Runes
+  "ᚠ", "ᚢ", "ᚦ", "ᚨ", "ᚱ", "ᚲ", "ᚷ", "ᚹ", "ᚺ", "ᚾ", "ᛁ", "ᛃ", "ᛇ", "ᛈ", "ᛉ", "ᛋ",
+  // Greek
+  "α", "β", "γ", "δ", "θ", "λ", "μ", "ξ", "π", "ρ", "σ", "φ", "ψ", "Ω",
+  // Cyrillic
+  "Ж", "Д", "Ѭ", "Ѳ", "Ѧ", "Ѱ", "Ю", "Я", "Ѣ", "Ъ", "Ѫ", "Җ",
+  // Armenian
+  "Ա", "Թ", "Ժ", "Խ", "Ծ", "Շ", "Չ", "Ճ", "Ջ",
+  // Georgian (Mkhedruli)
+  "Ⴀ", "Ⴁ", "Ⴂ", "Ⴃ", "Ⴄ", "Ⴅ", "Ⴆ", "Ⴇ", "Ⴈ", "Ⴉ", "Ⴊ", "Ⴋ",
+  // Glagolitic
+  "Ⰰ", "Ⰱ", "Ⰲ", "Ⰳ", "Ⰴ", "Ⰵ", "Ⰶ", "Ⰷ", "Ⰸ", "Ⰹ", "Ⰺ", "Ⰻ", "Ⰼ",
+  // Miscellaneous ancient/occult-style
+  "☥", "✶", "☯", "♆", "♄", "☽", "✡", "⚚",
+  // Lycian
+  "𐊣","𐊤","𐊥","𐊦","𐊧","𐊨","𐊩","𐊪","𐊫","𐊬","𐊭","𐊮","𐊯","𐊰","𐊱","𐊲","𐊳","𐊴","𐊵","𐊶","𐊷","𐊸","𐊹","𐊺","𐊻","𐊼","𐊽","𐊾","𐊿","𐋀","𐋁","𐋂","𐋃","𐋄","𐋅","𐋆","𐋇","𐋈","𐋉","𐋊","𐋋","𐋌","𐋍","𐋎","𐋏",
+  // Egyptian Hieroglyphs (just a few representative ones; Unicode block contains 1,070+ signs) :contentReference[oaicite:1]{index=1}
+  "𓀀","𓁐","𓂀","𓃀","𓄿","𓅓","𓆣",
+  // Linear A / Linear B
+  "𐘀","𐘁","𐘂","𐝀","𐝁","𐝂",
+  // Gothic / Ugaritic / Old Persian / Shavian etc.
+  "𐌰","𐌱","𐌲","𐌳","𐌴", // Gothic
+  "𐎀","𐎁","𐎂","𐎃","𐎄", // Ugaritic
+  "𐑀","𐑁","𐑂","𐑐","𐑄" // Shavian / Osmanya
+];
 
 const gemColors = [
   { color: "#DC2626", name: "Ruby" }, // Red
@@ -168,14 +201,59 @@ const ShinyGem = ({ color, number }: { color: string; number: number }) => (
   </div>
 )
 
+type Article = {
+  qid: string
+  title: string
+  description: string
+  image: string
+  views: string
+  category: string
+  rarity: string
+  lastUpdated: string
+  infobox: Record<string, string>
+  content: string
+}
+
 export default function HomePage() {
+
+  const [ancientKnowledge, setAncientKnowledge] = useState<Article[]>([])
+
+  useEffect(() => {
+    const fetchTopItems = async () => {
+      const qids = [
+        "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10"
+      ]
+      const results = await Promise.all(
+        qids.map(async (qid) => {
+          const res = await fetch(`/api/items/${qid}`)
+          const data = await res.json()
+          return {
+            qid,
+            title: data.label || "Unknown Title",
+            description: data.description || "No description available",
+            image: data.image || "/placeholder.svg?height=200&width=300",
+            views: data.views || `${(Math.random() * 2 + 0.9).toFixed(1)}M seekers`,
+            category: data.category || "Unknown",
+            rarity: data.rarity || "Common",
+            lastUpdated: data.lastUpdated || "N/A",
+            infobox: data.infobox || {},
+            content: data.content || "N/A"
+          }
+        })
+      )
+      setAncientKnowledge(results)
+    }
+
+    fetchTopItems()
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-950 via-stone-900 to-amber-900 text-amber-50 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Gleaming Dust Particles */}
         <div className="floating-particles">
-          {[...Array(25)].map((_, i) => (
+          {[...Array(40)].map((_, i) => (
             <div
               key={i}
               className="particle gleaming-dust"
@@ -190,14 +268,14 @@ export default function HomePage() {
 
         {/* Ancient Runes Background */}
         <div className="ancient-runes">
-          {["ᚠ", "ᚢ", "ᚦ", "ᚨ", "ᚱ", "ᚲ", "ᚷ", "ᚹ", "ᚺ", "ᚾ"].map((rune, i) => (
+          {ultraAncientGlyphs.map((rune, i) => (
             <div
               key={i}
               className="floating-rune"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 20}s`,
+                animationDelay: `${Math.random() * 3}s`,
               }}
             >
               {rune}
@@ -207,7 +285,7 @@ export default function HomePage() {
 
         {/* Mystical Orbs */}
         <div className="mystical-orbs">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(Math.floor(Math.random() * (15 - 5 + 1) + 5))].map((_, i) => (
             <div
               key={i}
               className="mystical-orb"
@@ -221,7 +299,7 @@ export default function HomePage() {
 
         {/* Magical Energy Streams */}
         <div className="energy-streams">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(Math.floor(Math.random() * (8 - 5 + 1) + 5))].map((_, i) => (
             <div
               key={i}
               className="energy-stream"
@@ -245,12 +323,12 @@ export default function HomePage() {
                 <Sparkles className="absolute -bottom-1 -left-1 h-4 w-4 text-yellow-300 animate-twinkle" />
               </div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent animate-shimmer">
-                Ancient Knowledge Vault
+                Veracity Vault
               </h1>
             </div>
             <div className="ml-auto flex items-center gap-2 text-sm text-amber-300">
               <Scroll className="h-4 w-4 animate-bounce" />
-              <span className="animate-fade-in">Mystical Wisdom Repository</span>
+              <span className="animate-fade-in">Your Wisdom Repository</span>
             </div>
           </div>
         </div>
@@ -269,11 +347,11 @@ export default function HomePage() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-8 relative">
               <h2 className="text-6xl font-bold mb-6 bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-300 bg-clip-text text-transparent animate-text-glow">
-                Most Sought Ancient Wisdom
+                Top 10 Articles of the Day
               </h2>
 
               {/* Floating Ancient Symbols */}
-              <div className="absolute -top-4 left-1/4 animate-float">
+              {/* <div className="absolute -top-4 left-1/4 animate-float">
                 <span className="text-4xl text-amber-400/60">☥</span>
               </div>
               <div className="absolute -top-8 right-1/3 animate-float-delayed">
@@ -281,7 +359,7 @@ export default function HomePage() {
               </div>
               <div className="absolute top-0 right-1/4 animate-float-slow">
                 <span className="text-5xl text-amber-300/40">✦</span>
-              </div>
+              </div> */}
 
               {/* Magical Constellation */}
               <div className="absolute inset-0 pointer-events-none">
@@ -371,7 +449,7 @@ export default function HomePage() {
                     {/* Image */}
                     <div className="relative h-40 overflow-hidden rounded-lg mx-4 mt-16 mb-4 border border-amber-700/30">
                       <img
-                        src={knowledge.image || "/old-paper.svg"}
+                        src={knowledge.image || "/old-paper.jpg"}
                         alt={knowledge.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ancient-sepia"
                       />

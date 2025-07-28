@@ -5,6 +5,10 @@ from datetime import datetime
 import requests
 import json
 import mysql.connector
+from airflow.hooks.base import BaseHook
+
+conn = BaseHook.get_connection("veracity_mysql")
+engine_uri = conn.get_uri()
 
 
 @dag(schedule="@daily", start_date=datetime(2025, 7, 1), catchup=False)  # noqa: E501
@@ -84,18 +88,24 @@ def wikidata_etl():
 
     @task()
     def load(data):
+        import os
+
         conn = mysql.connector.connect(
-            user="root", password="root", host="mysql", database="wikidata"
+            user=os.environ["VV_MYSQL_USER"],
+            password=os.environ["VV_MYSQL_PASSWORD"],
+            host=os.environ["VV_HOST"],
+            port=int(os.environ.get("VV_PORT", 3306)),
+            database=os.environ["VV_MYSQL_DB"],
         )
         cursor = conn.cursor()
         for a in data:
             cursor.execute(
                 """
-              INSERT INTO wikidata_items
+                INSERT INTO wikidata_items
                 (id, title, description, image, views, category, rarity,
-                 last_updated, infobox, content, score_date)
-              VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-              ON DUPLICATE KEY UPDATE
+                    last_updated, infobox, content, score_date)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                ON DUPLICATE KEY UPDATE
                 title=VALUES(title),
                 description=VALUES(description),
                 image=VALUES(image),

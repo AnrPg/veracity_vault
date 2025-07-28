@@ -12,7 +12,10 @@ def load_config(path: Path) -> dict:
     (using $AGE_IDENTITY or default).
     Otherwise load plaintext YAML.
     """
-    data = None
+
+    if not path.exists():
+        raise FileNotFoundError(f"Config file not found: {path}")
+
     if path.suffix == ".age":
         # determine identity file
         identity = os.environ.get("AGE_IDENTITY")
@@ -20,13 +23,14 @@ def load_config(path: Path) -> dict:
         # AGE_IDENTITY="~/apps/alethiomics_sensitive_data/key.txt")
         # e.g. /home/user/key.pub or /.config/key.txt or whatever...
 
-        cmd = ["age"]
-        if identity:
-            cmd += ["--identity", identity]
-        cmd += ["--decrypt", str(path)]
-        # decrypt into memory
+        if not identity:
+            raise EnvironmentError("AGE_IDENTITY is not set")
+
+        cmd = ["age", "--identity", identity, "--decrypt", str(path)]
         proc = subprocess.run(cmd, check=True, stdout=subprocess.PIPE)
-        data = proc.stdout.decode()
+
+        raw_yaml = proc.stdout.decode()
     else:
-        data = path.read_text()
-    return yaml.safe_load(data) or {}
+        raw_yaml = path.read_text()
+
+    return yaml.safe_load(raw_yaml) or {}

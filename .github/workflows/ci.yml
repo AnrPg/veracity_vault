@@ -43,7 +43,7 @@ jobs:
         run: |
           black --check backend airflow utils
           ruff check backend airflow utils --fix
-          mypy backend utils
+          mypy backend utils airflow
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

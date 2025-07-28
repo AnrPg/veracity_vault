@@ -1,0 +1,11 @@
+# Conda explicit history (only packages you requested)
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+prefix: /usr/share/miniconda/envs/test
+
+# Pip top-level dependencies (not required by others)
+pip==25.1
+setuptools==78.1.1
+wheel==0.45.1

@@ -7,12 +7,20 @@ on:
       - main
       - 'releases/**'
 
+permissions:
+  contents: write
+
 jobs:
   export-deps:
     runs-on: ubuntu-latest
+    permissions:
+     contents: write
     steps:
-      # 1. Checkout your code
+      # 1. Checkout the code
       - uses: actions/checkout@v3
+        with:
+          # persist the GITHUB_TOKEN so we can push later
+          persist-credentials: true
 
       # 2. Setup Conda
       - name: Setup Miniconda
@@ -46,6 +54,21 @@ jobs:
           conda env export --from-history --no-builds | sed '1d' >> $OUT
           echo -e "\n# Pip top-level dependencies (not required by others)" >> $OUT
           pip list --not-required --format=freeze >> $OUT
+
+      # 5. Commit & push back if changed
+      - name: Commit dependency exports
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add python-dependencies.txt
+          # (uncomment if you also export node deps)
+          # git add node-dependencies.json
+          if git diff --cached --quiet; then
+            echo "No changes to dependency exports."
+          else
+            git commit -m "chore: update exported dependencies"
+            git push
+          fi
 
       # # 5. Setup Node.js
       # - name: Setup Node.js

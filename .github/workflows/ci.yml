@@ -37,7 +37,7 @@ jobs:
         run: |
           pip install fastapi[all] mysql-connector-python aiohttp pydantic \
             apache-airflow apache-airflow-providers-http aiofiles asyncpg uvicorn \
-            black flake8 mypy types-PyYAML
+            black flake8 mypy types-PyYAML asyncpg-stubs~=0.30.0
 
       - name: Run Python format/lint/type-check
         run: |
